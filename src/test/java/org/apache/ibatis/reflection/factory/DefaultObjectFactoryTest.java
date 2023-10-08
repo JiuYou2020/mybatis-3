@@ -42,7 +42,7 @@ public class DefaultObjectFactoryTest {
   public void createClass() throws Exception {
     DefaultObjectFactory defaultObjectFactory = new DefaultObjectFactory();
     TestClass testClass = defaultObjectFactory.create(TestClass.class,
-        Arrays.<Class<?>>asList(String.class, Integer.class), Arrays.<Object>asList("foo", 0));
+        Arrays.asList(String.class, Integer.class), Arrays.asList("foo", 0));
 
     Assertions.assertEquals((Integer) 0, testClass.myInteger, "myInteger didn't match expected");
     Assertions.assertEquals("foo", testClass.myString, "myString didn't match expected");
@@ -52,7 +52,7 @@ public class DefaultObjectFactoryTest {
   public void createClassThrowsProperErrorMsg() {
     DefaultObjectFactory defaultObjectFactory = new DefaultObjectFactory();
     try {
-      defaultObjectFactory.create(TestClass.class, Collections.<Class<?>>singletonList(String.class), Collections.<Object>singletonList("foo"));
+      defaultObjectFactory.create(TestClass.class, Collections.singletonList(String.class), Collections.singletonList("foo"));
       Assertions.fail("Should have thrown ReflectionException");
     } catch (Exception e) {
       Assertions.assertTrue(e instanceof ReflectionException, "Should be ReflectionException");

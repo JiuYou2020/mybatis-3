@@ -37,8 +37,10 @@ public class DefaultObjectFactory implements ObjectFactory, Serializable {
     @SuppressWarnings("unchecked")
     @Override
     public <T> T create(Class<T> type, List<Class<?>> constructorArgTypes, List<Object> constructorArgs) {
+        // 获得需要创建的类
         Class<?> classToCreate = resolveInterface(type);
         // we know types are assignable
+        // 创建指定类的对象
         return (T) instantiateClass(classToCreate, constructorArgTypes, constructorArgs);
     }
 
@@ -49,8 +51,10 @@ public class DefaultObjectFactory implements ObjectFactory, Serializable {
 
     private <T> T instantiateClass(Class<T> type, List<Class<?>> constructorArgTypes, List<Object> constructorArgs) {
         try {
+            // 通过无参构造方法，创建指定类的对象
             Constructor<T> constructor;
             if (constructorArgTypes == null || constructorArgs == null) {
+                // 使用特定构造方法，创建指定类的对象
                 constructor = type.getDeclaredConstructor();
                 try {
                     return constructor.newInstance();
@@ -75,6 +79,7 @@ public class DefaultObjectFactory implements ObjectFactory, Serializable {
                 }
             }
         } catch (Exception e) {
+            // 拼接 argTypes
             StringBuilder argTypes = new StringBuilder();
             if (constructorArgTypes != null && !constructorArgTypes.isEmpty()) {
                 for (Class<?> argType : constructorArgTypes) {
@@ -83,6 +88,7 @@ public class DefaultObjectFactory implements ObjectFactory, Serializable {
                 }
                 argTypes.deleteCharAt(argTypes.length() - 1); // remove trailing ,
             }
+            // 拼接 argValues
             StringBuilder argValues = new StringBuilder();
             if (constructorArgs != null && !constructorArgs.isEmpty()) {
                 for (Object argValue : constructorArgs) {
@@ -91,6 +97,7 @@ public class DefaultObjectFactory implements ObjectFactory, Serializable {
                 }
                 argValues.deleteCharAt(argValues.length() - 1); // remove trailing ,
             }
+            // 抛出 ReflectionException 异常
             throw new ReflectionException("Error instantiating " + type + " with invalid types (" + argTypes + ") or values (" + argValues + "). Cause: " + e, e);
         }
     }
